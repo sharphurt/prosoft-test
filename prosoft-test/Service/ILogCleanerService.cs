@@ -1,6 +1,6 @@
 ﻿namespace ProsoftTest.Service;
 
-public class ILogCleanerService
+public interface ILogCleanerService
 {
-    
+    public void CleanInDirectory(string path);
 }

@@ -1,13 +1,11 @@
 ﻿using ProsoftTest.Exception;
 using ProsoftTest.Model;
 
-namespace ProsoftTest.Validation;
+namespace ProsoftTest.Validation.ValidationRule;
 
 public class StartFileValidationRule : IValidationRule
 {
-    public IValidationRule? Successor { get; set; }
-
-    void IValidationRule.Validate(LogLine previous, LogLine current)
+    void IValidationRule.Validate(LogLine current, LogLine previous)
     {
         if (previous is null && current.Type != LineType.TagLine)
             throw new InvalidLogFormatException("Log starts incorrectrly");

@@ -3,5 +3,6 @@
 public enum LineType
 {
     TagLine,
-    BodyLine
+    BodyLine,
+    SeparatorLine
 }

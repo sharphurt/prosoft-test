@@ -1,13 +1,11 @@
 ﻿using ProsoftTest.Exception;
 using ProsoftTest.Model;
 
-namespace ProsoftTest.Validation;
+namespace ProsoftTest.Validation.ValidationRule;
 
 public class TagLinePlaceValidationRule : IValidationRule
 {
-    public IValidationRule? Successor { get; set; }
-
-    public void Validate(LogLine previous, LogLine current)
+    public void Validate(LogLine current, LogLine previous)
     {
         if (previous.Type != LineType.SeparatorLine && current.Type == LineType.TagLine)
             throw new InvalidLogFormatException("Tag line should be after separator line");

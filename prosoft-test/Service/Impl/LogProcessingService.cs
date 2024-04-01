@@ -8,20 +8,19 @@ using ProsoftTest.Validation;
 
 namespace ProsoftTest.Service.Impl;
 
-public partial class LogProcessingService(
-    IFileSystemService fileSystemService,
-    IConfiguration configuration,
-    ILogger<LogProcessingService> logger)
+public partial class LogProcessingService(IConfiguration configuration, ILogger<LogProcessingService> logger)
+    : ILogProcessingService
 {
-    private readonly IFileSystemService _fileSystemService = fileSystemService;
-
     [GeneratedRegex(@"(\[.+\]) (\d{2}:\d{2}:\d{2}.\d{3}\+\d{2}:\d{2}$)", RegexOptions.Compiled)]
     private static partial Regex TagLineRegex();
+
+    public int ProcessedLinesCount { get; private set; }
 
     public IEnumerable<string> ClearLog(IEnumerable<string> log)
     {
         var previousLine = new LogLine("file-start", LineType.SeparatorLine);
         var skippingProcess = false;
+        ProcessedLinesCount = 0;
 
         foreach (var line in log)
         {
@@ -36,14 +35,15 @@ public partial class LogProcessingService(
             if (skippingProcess)
                 continue;
 
+            ProcessedLinesCount++;
             yield return parsedLine.RawLine;
         }
     }
 
     private bool ShouldSkipImportance(LogImportance importance)
     {
-        var availableImportanceTags = configuration.GetValue<List<string>>("AvailableImportanceTags");
-        return !availableImportanceTags!.Contains(importance.ToString());
+        var availableImportanceTags = configuration.GetSection("AvailableImportanceTags").AsEnumerable();
+        return availableImportanceTags.All(e => e.Value != importance.ToString());
     }
 
     private LogLine ParseLine(string line)

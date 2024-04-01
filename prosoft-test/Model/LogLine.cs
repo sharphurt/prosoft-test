@@ -1,10 +1,9 @@
 ﻿namespace ProsoftTest.Model;
 
-public class LogLineModel
+public class LogLine(string rawLine, LineType type, LogImportance? logImportance = null)
 {
-    public string RawLine { get; }
+    public string RawLine { get; } = rawLine;
+    public LineType Type { get; } = type;
 
-    public LineType Type { get; }
-
-    public LogImportance Importance { get; }
+    public LogImportance? Importance { get; } = logImportance;
 }

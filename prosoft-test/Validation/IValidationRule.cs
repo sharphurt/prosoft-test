@@ -4,12 +4,10 @@ namespace ProsoftTest.Validation;
 
 public interface IValidationRule
 {
-    public IValidationRule? Successor { get; set; }
-    private protected void Validate(LogLine previous, LogLine current);
+    private protected void Validate(LogLine current, LogLine previous);
 
-    public void Call(LogLine previous, LogLine current)
+    public void Call(LogLine current, LogLine previous)
     {
-        Validate(previous, current);
-        Successor?.Call(previous, current);
+        Validate(current, previous);
     }
 }
